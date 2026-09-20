@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EnterpriseDiscovery",
+  "type": "object",
+  "required": ["engagement", "systems", "unstructured", "access_notes"],
+  "properties": {
+    "engagement": {
+      "type": "object",
+      "properties": {
+        "company": { "type": "string" },
+        "industry": { "type": "string" },
+        "locale": { "enum": ["fr-CA", "en"] },
+        "primary_workflow": { "type": "string" },
+        "sponsor": { "type": "string" }
+      }
+    },
+    "systems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "domain"],
+        "properties": {
+          "name": { "type": "string" },
+          "domain": {
+            "enum": ["accounting", "sales", "purchasing", "inventory", "payroll", "mes", "other"]
+          },
+          "version": { "type": "string" },
+          "hosting": { "enum": ["on_prem", "cloud", "unknown"] },
+          "location_or_url": { "type": "string" },
+          "daily_users": { "type": "string" },
+          "export_methods": {
+            "type": "array",
+            "items": { "enum": ["api", "odbc_sql", "csv", "excel", "pdf", "ui_only", "unknown"] }
+          },
+          "class_guess": { "enum": ["A", "B", "C", "D", "unknown"] }
+        }
+      }
+    },
+    "unstructured": {
+      "type": "object",
+      "properties": {
+        "chat": { "type": "string" },
+        "files": { "type": "string" },
+        "email": { "type": "string" },
+        "invoice_pdf_location": { "type": "string" }
+      }
+    },
+    "access_notes": { "type": "string" },
+    "must_not_touch": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
