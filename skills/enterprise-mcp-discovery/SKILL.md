@@ -4,17 +4,17 @@ description: >-
   Use this when onboarding a non-developer so an agent can discover work apps
   (open-apps inventory + browser tabs), pre-fill a systems questionnaire, confirm
   with the user, deepen SaaS vs on-prem via computer use, find official then
-  community MCP servers, scaffold missing ones, install/test, and produce a
-  coworker install kit prompt. For accounting/sales/purchasing/ERP/CRM kickstarts
+  community MCP servers, scaffold missing ones, install/test, produce a director-facing agent-ready report with checkmarks,
+  and a coworker install kit prompt. For accounting/sales/purchasing/ERP/CRM kickstarts
   when Codex/Claude lack native plugins (incl. Québec stacks).
 ---
 
-# Enterprise Systems → MCP Kickstart (v0.2)
+# Enterprise Systems → MCP Kickstart (v0.3)
 
 ## Goal
 From a live workstation, build a **confirmed systems map**, then a **MCP kit**
 (official → community → custom) so agents can read accounting / sales / purchasing
-(and related) data — ending with a **coworker install prompt**.
+(and related) data — ending with a director-facing **Agent-Ready Report** (checkmarks + verdict), then optional MCP kit + **coworker install prompt**.
 
 ## Hard rules
 - **Consent first.** Before any inventory, ask the user to open daily work apps and
@@ -188,6 +188,42 @@ Also emit `mcp-kit.zip` contents list (or folder) suitable to share internally.
 
 ---
 
+---
+
+## Phase 9 — Agent-Ready Report (required Day 1 output)
+
+Before closing, write **`AGENT_READY_REPORT.md`** using
+`templates/AGENT_READY_REPORT.template.md`.
+
+This is the **primary deliverable** for leaders — not the MCP kit.
+The kit can follow the same day; the report must exist even if every MCP is blocked.
+
+### Must include
+1. One-line **verdict**: `PASS` | `CONDITIONAL` | `NOT READY` (rules in the template)
+2. **Scorecard** of 10 checks with ✅ / ⚠️ / ❌ and **evidence** (no empty rows)
+3. Tables: **reachable today** vs **blocked** (with owner + fix)
+4. Explicit answer to: *Would an agent hit a wall on the first system that matters?*
+5. One recommended next step a director can act on
+
+### Checkmarks the skill must evaluate (do not skip)
+| # | Check |
+|---|---|
+| 1 | Accounting / GL agent-reachable |
+| 2 | Purchasing / inventory agent-reachable |
+| 3 | Sales / CRM agent-reachable |
+| 4 | Business files allowlisted / searchable |
+| 5 | Chat/email: official MCP/plugin or scoped out |
+| 6 | ≥1 read smoke test for primary workflow |
+| 7 | Writes still off |
+| 8 | Secrets ownership known |
+| 9 | Blockers have owner + next step |
+| 10 | Clear “fix before next pilot” list |
+
+Map Class A/B → likely ✅/⚠️, Class C/D → ❌ for the systems in the primary workflow.
+If inventory never saw a domain, mark ❌ or ⚠️ and say **missing from discovery** — do not invent access.
+
+Show the report to the user and ask: *Does this match how you see the company?*
+
 ## Deliverables (always)
 | File | Purpose |
 |---|---|
@@ -204,6 +240,7 @@ Also emit `mcp-kit.zip` contents list (or folder) suitable to share internally.
 ---
 
 ## Done means
+- **`AGENT_READY_REPORT.md` written and shown** (verdict + all 10 checks filled)
 - User confirmed systems map (not only agent guesses)
 - Gaps (CRM/ERP/docs) explicitly asked if missing from inventory
 - MCP search followed official → community → custom

@@ -1,9 +1,7 @@
 # Skills
 
-Codex / Claude Agent skills live here — one folder per skill.
-
 | Skill | Version | One-liner |
 |---|---|---|
-| [enterprise-mcp-discovery](./enterprise-mcp-discovery/) | 0.2 | Discovery tool for enterprise system MCP builders |
+| [enterprise-mcp-discovery](./enterprise-mcp-discovery/) | 0.3 | Discovery tool for enterprise system MCP builders — Day 1 agent-ready report |
 
 Add new skills as `skills/<skill-id>/SKILL.md`.

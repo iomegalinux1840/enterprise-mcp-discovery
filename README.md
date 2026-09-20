@@ -2,43 +2,48 @@
 
 **Discovery tool for enterprise system MCP builders.**
 
-Help non-developers (and agents) map the apps and SaaS a company actually uses, confirm the stack, find **official → community → custom** MCP servers, scaffold what’s missing, smoke-test, and ship a **coworker install kit**.
+> **Before you buy another AI tool, answer one question: are you agent-ready?**  
+> Not “do we have ChatGPT.” Is your data reachable by a normal AI agent — or locked in ERP screens, exports, and tribal knowledge?
 
-Built for accounting / sales / purchasing / ERP / CRM kickstarts when Codex or Claude don’t ship a native plugin — including common Québec stacks (Acomba, Maestro, Business Central, SoftExpert, …).
+Run this skill in **Claude** or **Codex**. It inventories your stack, checks what’s accessible, and produces a plain **Day 1 Agent-Ready Report**: what an agent can use today, what’s blocked, and what to fix before the next pilot.
+
+Day 1 output isn’t a chatbot. It’s clarity a director can act on.
 
 ## Repo layout
 
 ```text
 skills/
-  enterprise-mcp-discovery/   # v0.2 — this skill
+  enterprise-mcp-discovery/   # current skill (v0.3)
   …                           # future skills go here
 ```
 
-Each skill is a Codex/Claude-compatible folder (`SKILL.md` + helpers).
-
-## Skill: `enterprise-mcp-discovery` (v0.2)
+## Skill: `enterprise-mcp-discovery` (v0.3)
 
 | Phase | What happens |
 |---|---|
 | 0 | User opens daily work apps/tabs → says DONE |
-| 1 | Bash inventory (running/installed apps) |
-| 2 | Browser tab **URL + title** (not passwords / full DOM) |
-| 3 | Group & filter productivity vs noise |
-| 4 | Pre-fill questionnaire → user confirms + gap-fill (CRM/ERP/docs) |
+| 1–2 | Bash inventory + browser tab URL/title |
+| 3–4 | Filter → confirm questionnaire + gap-fill |
 | 5 | Computer use for versions / SaaS vs on-prem |
-| 6 | MCP search: **official → community → custom** |
-| 7 | Install + smoke test (read-only default) |
-| 8 | `COWORKER_INSTALL_PROMPT.md` for peer machines |
+| 6–7 | MCP search official → community → custom; install + smoke |
+| 8 | Coworker install prompt |
+| **9** | **`AGENT_READY_REPORT.md`** — verdict + 10 checkmarks |
+
+### Day 1 primary deliverable
+
+`AGENT_READY_REPORT.md` includes:
+
+- Verdict: **PASS / CONDITIONAL / NOT READY**
+- Scorecard: accounting, purchasing, sales/CRM, files, chat, smoke test, read-only, secrets, blockers, “fix before pilot”
+- Tables: reachable today vs blocked (owner + next step)
+
+Technical detail lives in `ACCESS_REPORT.md`; leaders read the Agent-Ready Report first.
 
 ### Install in Codex
-
-Copy the skill folder into your Codex skills directory:
 
 ```bash
 cp -R skills/enterprise-mcp-discovery ~/.codex/skills/
 ```
-
-Or clone this repo and point Codex at `skills/enterprise-mcp-discovery`.
 
 ### Quick inventory scripts (macOS)
 
@@ -46,16 +51,14 @@ Or clone this repo and point Codex at `skills/enterprise-mcp-discovery`.
 cd skills/enterprise-mcp-discovery
 bash scripts/inventory_macos.sh > /tmp/inventory_apps.json
 bash scripts/browser_tabs_macos.sh > /tmp/inventory_tabs.json
-# merge, then:
-python3 scripts/filter_productivity.py < merged.json
 ```
 
 ## Principles
 
 - Consent before scanning
 - Read-only MCP tools by default
-- Prefer configuring official MCPs over reinventing M365/Slack
-- Export-folder bridges (Class B) are valid “next week” wins
+- Prefer official MCPs over reinventing M365/Slack
+- Export-folder bridges (Class B) are valid week-1 wins
 
 ## License
 
