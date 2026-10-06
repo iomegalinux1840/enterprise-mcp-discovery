@@ -62,7 +62,7 @@ Windows (PowerShell 5.1 or newer):
 ```powershell
 cd skills\enterprise-mcp-discovery
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\inventory_windows.ps1 | Out-File -Encoding utf8 inventory_apps.json
-powershell -NoProfile -ExecutionPolicy Bypass -File scriptsrowser_tabs_windows.ps1 | Out-File -Encoding utf8 inventory_tabs.json
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\browser_tabs_windows.ps1 | Out-File -Encoding utf8 inventory_tabs.json
 python scripts\merge_inventory.py inventory_apps.json inventory_tabs.json inventory_apps.json
 ```
 
