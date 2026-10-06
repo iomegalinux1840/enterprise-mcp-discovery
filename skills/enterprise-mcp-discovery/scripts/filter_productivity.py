@@ -5,25 +5,29 @@ import json, re, sys
 from urllib.parse import urlparse
 
 NOISE = re.compile(
-    r"(spotify|steam|discord|slack call|wallpaper|screensa|photo booth|chess|tv\b|music$|podcasts|messages$|facetime)",
+    r"(spotify|steam|discord|wallpaper|screensa|photo booth|chess|tv\b|music$|podcasts|facetime)",
     re.I,
 )
 PRODUCTIVITY_APP = re.compile(
     r"(excel|word|outlook|teams|slack|acomba|maestro|sage|quickbooks|dynamics|sap|salesforce|hubspot|"
-    r"notion|obsidian|chrome|edge|safari|arc|finder|onedrive|sharepoint|zoom|webex|cisco|"
-    r"power\s*bi|tableau|filezilla|cyberduck|remote\s*desktop|company\s*portal)",
+    r"notion|obsidian|clickup|todoist|asana|jira|trello|chrome|edge|safari|arc|finder|onedrive|sharepoint|"
+    r"zoom|webex|cisco|power\s*bi|tableau|filezilla|cyberduck|remote\s*desktop|company\s*portal|"
+    r"front|azure\s*data\s*studio|edrawings|forticlient|pulseway)",
     re.I,
 )
 SAAS_HINTS = [
-    (r"dynamics\.com|businesscentral", "Business Central / Dynamics"),
+    (r"dynamics\.com|businesscentral|^bc\.", "Business Central / Dynamics"),
     (r"salesforce\.com", "Salesforce"),
     (r"hubspot\.com", "HubSpot"),
     (r"quickbooks\.intuit\.com|intuit\.com", "QuickBooks"),
-    (r"sharepoint\.com|onedrive\.live\.com|office\.com|microsoft365", "Microsoft 365"),
+    (r"sharepoint\.com|onedrive\.live\.com|office\.com|microsoft365|teams\.microsoft\.com", "Microsoft 365"),
     (r"slack\.com", "Slack"),
+    (r"clickup\.com", "ClickUp"),
+    (r"notion\.so", "Notion"),
     (r"atlassian\.net|jira\.|confluence\.", "Atlassian"),
     (r"github\.com", "GitHub"),
     (r"gitlab\.com", "GitLab"),
+    (r"base44\.com", "Base44"),
 ]
 
 def main():
@@ -44,9 +48,22 @@ def main():
     for t in tabs:
         url = t.get("url") or ""
         host = urlparse(url).netloc.lower()
+        if not host:
+            # Windows: URL may be empty because only window titles are captured.
+            # Keep the title so the user can confirm the SaaS later.
+            saas.append({
+                "title": t.get("title"),
+                "url": url,
+                "host": host,
+                "guess": "needs_url",
+                "note": "title-only (see tabs_note)",
+                "browser": t.get("browser"),
+            })
+            continue
+        match_against = host or url
         matched = None
         for pat, label in SAAS_HINTS:
-            if re.search(pat, url, re.I):
+            if re.search(pat, match_against, re.I):
                 matched = label
                 break
         saas.append({
@@ -61,7 +78,9 @@ def main():
         "candidates": candidates,
         "filtered_out": noise,
         "saas_from_tabs": saas,
-        "missing_expected_check": ["crm", "erp_accounting", "document_ecm", "chat"],
+        "tabs_urls_unavailable": data.get("tabs_urls_unavailable", False),
+        "tabs_note": data.get("tabs_note", ""),
+        "missing_expected_check": ["crm", "erp_accounting", "document_ecm", "notes", "tasks", "chat"],
     }
     print(json.dumps(out, indent=2))
 

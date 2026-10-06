@@ -5,8 +5,14 @@ set -euo pipefail
 python3 - <<'PY'
 import json, subprocess
 
+# Delimiter is defined OUTSIDE the browser `tell` block as an ASCII char,
+# because the AppleScript keyword `tab` collides with each browser's tab
+# object and would otherwise emit the literal text "tab" instead of "\t".
+DELIM_DEF = 'set d to (ASCII character 9)'
+
 def tabs_chrome_family(app):
     script = f'''
+    {DELIM_DEF}
     set output to ""
     try
       tell application "{app}"
@@ -14,7 +20,7 @@ def tabs_chrome_family(app):
         repeat with w in windows
           try
             repeat with t in tabs of w
-              set output to output & (title of t) & tab & (URL of t) & linefeed
+              set output to output & (title of t) & d & (URL of t) & linefeed
             end repeat
           end try
         end repeat
@@ -39,6 +45,7 @@ def tabs_chrome_family(app):
 
 def tabs_safari():
     script = '''
+    set d to (ASCII character 9)
     set output to ""
     try
       tell application "Safari"
@@ -46,7 +53,7 @@ def tabs_safari():
         repeat with w in windows
           try
             repeat with t in tabs of w
-              set output to output & (name of t) & tab & (URL of t) & linefeed
+              set output to output & (name of t) & d & (URL of t) & linefeed
             end repeat
           end try
         end repeat
