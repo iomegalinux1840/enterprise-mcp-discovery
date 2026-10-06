@@ -22,12 +22,13 @@ skills/
 | Phase | What happens |
 |---|---|
 | 0 | User opens daily work apps/tabs → says DONE |
-| 1–2 | Bash inventory + browser tab URL/title |
+| 1–2 | Inventory + browser tabs (macOS + Windows) |
 | 3–4 | Filter → confirm questionnaire + gap-fill |
 | 5 | Computer use for versions / SaaS vs on-prem |
 | 6–7 | MCP search official → community → custom; install + smoke |
 | 8 | Coworker install prompt |
-| **9** | **`AGENT_READY_REPORT.md`** — verdict + 10 checkmarks |
+| 9 | Consultant questions (copy-paste, grouped by software) |
+| **10** | **`AGENT_READY_REPORT.md`** — verdict + 10 checkmarks |
 
 ### Day 1 primary deliverable
 
@@ -45,13 +46,28 @@ Technical detail lives in `ACCESS_REPORT.md`; leaders read the Agent-Ready Repor
 cp -R skills/enterprise-mcp-discovery ~/.codex/skills/
 ```
 
-### Quick inventory scripts (macOS)
+### Quick inventory scripts (macOS + Windows)
+
+macOS:
 
 ```bash
 cd skills/enterprise-mcp-discovery
 bash scripts/inventory_macos.sh > /tmp/inventory_apps.json
 bash scripts/browser_tabs_macos.sh > /tmp/inventory_tabs.json
+python3 scripts/merge_inventory.py /tmp/inventory_apps.json /tmp/inventory_tabs.json /tmp/inventory_apps.json
 ```
+
+Windows (PowerShell 5.1 or newer):
+
+```powershell
+cd skills\enterprise-mcp-discovery
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\inventory_windows.ps1 | Out-File -Encoding utf8 inventory_apps.json
+powershell -NoProfile -ExecutionPolicy Bypass -File scriptsrowser_tabs_windows.ps1 | Out-File -Encoding utf8 inventory_tabs.json
+python scripts\merge_inventory.py inventory_apps.json inventory_tabs.json inventory_apps.json
+```
+
+On Windows, browser URLs are not exposed to PowerShell, so the tab script captures
+titles only and asks the user to paste the address-bar list.
 
 ## Principles
 
