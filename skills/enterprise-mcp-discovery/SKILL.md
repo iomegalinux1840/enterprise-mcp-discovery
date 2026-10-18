@@ -79,6 +79,22 @@ document stores and remote desktop systems. Use N/A for genuinely irrelevant dom
 Ask specifically where invoices, POs, customer orders, inventory exports, reports,
 and working spreadsheets live, and which are authoritative versus copies.
 
+Guide the user throughout discovery instead of relying on their initial open-app
+list. Ask what the business does, then suggest relevant examples in plain language:
+supplier/customer invoices, sales or customer orders, purchase orders, and inventory
+only if the business handles stock. For a service business, suggest quotes, projects
+or time records instead of assuming an inventory system. These are prompts, not
+claims that the business uses those systems.
+
+For each relevant missing source, ask “Which app do you use for this, or where do
+you keep these files?” Offer to have the user open the app/folder, paste its location,
+or mark it not applicable. Revisit the checklist after inventory and before closing
+the report. If something was forgotten, collect only the newly authorized source,
+merge it into the existing map and update the report; do not restart discovery.
+Distinguish not applicable, forgotten/not yet opened, unknown and inaccessible.
+Choose one useful starting workflow with the user rather than asking them to know
+which systems an agent needs in advance.
+
 For every relevant folder or cloud library, identify:
 - Exact path/UNC/library URL, purpose, business owner and department.
 - Local, NAS/network, synced cloud, cloud-only, export inbox or archive storage.
