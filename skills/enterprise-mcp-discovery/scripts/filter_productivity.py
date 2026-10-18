@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Group inventory into productivity candidates vs noise."""
 from __future__ import annotations
+from inventory_utils import sanitize_url
 import json, re, sys
 from urllib.parse import urlparse
 
@@ -31,7 +32,7 @@ SAAS_HINTS = [
 ]
 
 def main():
-    data = json.load(sys.stdin)
+    data = json.loads(sys.stdin.read().lstrip("\ufeff"))
     running = [a.get("name", "") for a in data.get("running_apps", [])]
     installed = data.get("installed_apps", [])
     tabs = data.get("browser_tabs", [])
@@ -46,7 +47,7 @@ def main():
             candidates.append({"name": name, "bucket": bucket, "evidence": "app"})
 
     for t in tabs:
-        url = t.get("url") or ""
+        url = sanitize_url(t.get("url") or "")
         host = urlparse(url).netloc.lower()
         if not host:
             # Windows: URL may be empty because only window titles are captured.
@@ -75,6 +76,11 @@ def main():
         })
 
     out = {
+        "mounted_shares": data.get("mounted_shares", []),
+        "open_folders": data.get("open_folders", []),
+        "folder_candidates": data.get("folder_candidates", []),
+        "finder_target": data.get("finder_target", ""),
+        "collection_errors": data.get("collection_errors", []),
         "candidates": candidates,
         "filtered_out": noise,
         "saas_from_tabs": saas,

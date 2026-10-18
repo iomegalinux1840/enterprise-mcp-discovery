@@ -7,9 +7,10 @@
 # the user to paste the address-bar list or use a "copy all tabs" browser extension.
 #
 # Usage (Windows PowerShell 5.1 or newer):
-#   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\browser_tabs_windows.ps1 | Out-File -Encoding utf8 tabs.json
+#   powershell -NoProfile -File scripts\browser_tabs_windows.ps1 | Out-File -Encoding utf8 tabs.json
 
-$ErrorActionPreference = "SilentlyContinue"
+$ErrorActionPreference = "Continue"
+$Error.Clear()
 
 $browsers = @(
     @{ proc = "chrome";   name = "Chrome" },
@@ -21,7 +22,7 @@ $browsers = @(
 
 $tabs = @()
 foreach ($b in $browsers) {
-    Get-Process -Name $b.proc |
+    Get-Process -Name $b.proc -ErrorAction SilentlyContinue |
         Where-Object { $_.MainWindowTitle -and $_.MainWindowTitle.Trim() } |
         ForEach-Object {
             $tabs += [ordered]@{
@@ -34,6 +35,7 @@ foreach ($b in $browsers) {
 
 $result = [ordered]@{
     browser_tabs          = @($tabs)
+    collection_errors = @($Error | Where-Object { $_.FullyQualifiedErrorId -notlike "NoProcessFoundForGivenName*" } | ForEach-Object { [ordered]@{ source = "browser_titles"; error = $_.Exception.GetType().Name } })
     tabs_urls_unavailable = $true
     tabs_note             = "Windows PowerShell cannot enumerate every browser tab URL. Titles only; ask the user to paste address-bar URLs or use a copy-all-tabs browser extension."
 }

@@ -35,3 +35,12 @@ Do **not** commit secrets. Use Keychain/env.
 ## Rules
 - Read-only only
 - If smoke fails, stop and report — do not invent workarounds that write data
+
+## Workstation-specific scope
+Confirm department, workflow, allowed folder roots, excluded folders, tenant and
+agent identity on this machine. The original workstation's paths and permissions
+are evidence, not settings to copy blindly. Read DATA_LOCATIONS.md and ACCESS_REPORT.md.
+
+## Rollback
+{{how_to_remove_only_the_added_connector_entries_and_stop_the_added_services}}
+Do not delete business data or existing unrelated configuration.

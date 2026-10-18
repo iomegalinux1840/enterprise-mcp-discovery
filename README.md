@@ -13,29 +13,27 @@ Day 1 output isn’t a chatbot. It’s clarity a director can act on.
 
 ```text
 skills/
-  enterprise-mcp-discovery/   # current skill (v0.3)
+  enterprise-mcp-discovery/   # current skill (v0.4)
   …                           # future skills go here
 ```
 
-## Skill: `enterprise-mcp-discovery` (v0.3)
+## Skill: `enterprise-mcp-discovery` (v0.4)
 
 | Phase | What happens |
 |---|---|
-| 0 | User opens daily work apps/tabs → says DONE |
-| 1–2 | Inventory + browser tabs (macOS + Windows) |
-| 3–4 | Filter → confirm questionnaire + gap-fill |
-| 5 | Computer use for versions / SaaS vs on-prem |
-| 6–7 | MCP search official → community → custom; install + smoke |
-| 8 | Coworker install prompt |
-| 9 | Consultant questions (copy-paste, grouped by software) |
-| **10** | **`AGENT_READY_REPORT.md`** — verdict + 10 checkmarks |
+| 1 | Consent, work apps/tabs/open folders, metadata inventory |
+| 2 | Confirm systems; locate business folders and run bounded metadata scan |
+| 3 | Identify versions; research APIs, databases, exports, files and connectors |
+| 4 | Verify each required source and an end-to-end workflow read |
+| 5 | Complete Agent-Ready Report, data-location map and technical access register |
+| 6 | Optional connector installation and coworker kit when requested |
 
 ### Day 1 primary deliverable
 
 `AGENT_READY_REPORT.md` includes:
 
 - Verdict: **PASS / CONDITIONAL / NOT READY**
-- Scorecard: accounting, purchasing, sales/CRM, files, chat, smoke test, read-only, secrets, blockers, “fix before pilot”
+- Evidence scorecard covering every required system and folder, document extraction, freshness, read-only permissions and end-to-end reads
 - Tables: reachable today vs blocked (owner + next step)
 
 Technical detail lives in `ACCESS_REPORT.md`; leaders read the Agent-Ready Report first.
@@ -61,8 +59,8 @@ Windows (PowerShell 5.1 or newer):
 
 ```powershell
 cd skills\enterprise-mcp-discovery
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts\inventory_windows.ps1 | Out-File -Encoding utf8 inventory_apps.json
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts\browser_tabs_windows.ps1 | Out-File -Encoding utf8 inventory_tabs.json
+powershell -NoProfile -File scripts\inventory_windows.ps1 | Out-File -Encoding utf8 inventory_apps.json
+powershell -NoProfile -File scripts\browser_tabs_windows.ps1 | Out-File -Encoding utf8 inventory_tabs.json
 python scripts\merge_inventory.py inventory_apps.json inventory_tabs.json inventory_apps.json
 ```
 
@@ -83,3 +81,33 @@ MIT — see [LICENSE](LICENSE).
 ## Author
 
 Dave Girard ([@iomegalinux1840](https://github.com/iomegalinux1840))
+
+## Folder discovery and complete handoff
+
+Inventory finds mounted shares, open folders and common local/cloud root candidates.
+After the user confirms scan roots and exclusions, run metadata-only discovery:
+
+```bash
+python3 scripts/discover_folders.py --root "/approved/department" --exclude "/approved/department/HR" --max-depth 3 --max-entries 2000 --output folder_inventory.json
+```
+
+Run from the skill directory; put the output outside scanned roots. This inventories
+folder paths, extension counts, sizes and modification ranges without opening file
+contents. It skips links and detectable Windows cloud placeholders, and reports
+errors/truncation. Cloud-only libraries need supported metadata API/UI discovery.
+
+`DATA_LOCATIONS.md` records exact locations and ownership. `ACCESS_REPORT.md` records
+per-source access steps, permissions, vendor references, freshness and test evidence.
+`AGENT_READY_REPORT.md` distinguishes verified access from documented possibilities.
+PASS requires all workflow-required sources, including folders, to pass intended
+read tests and a read-only end-to-end workflow test. Connector installation is optional.
+
+## Validation
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+Tests use synthetic data and temporary folders; they do not scan the workstation.
+Windows scripts require native Windows validation; Python tests cover BOM input,
+folder propagation, URL sanitation, bounded traversal and error reporting.

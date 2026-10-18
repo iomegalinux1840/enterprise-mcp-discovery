@@ -3,9 +3,10 @@
 # drives, and the active File Explorer window (the user's open shared folder).
 #
 # Usage (Windows PowerShell 5.1 or newer):
-#   powershell -NoProfile -ExecutionPolicy Bypass -File scripts\inventory_windows.ps1 | Out-File -Encoding utf8 inventory_raw.json
+#   powershell -NoProfile -File scripts\inventory_windows.ps1 | Out-File -Encoding utf8 inventory_raw.json
 
-$ErrorActionPreference = "SilentlyContinue"
+$ErrorActionPreference = "Continue"
+$Error.Clear()
 
 function Get-RunningGuiApps {
     $names = Get-Process |
@@ -53,17 +54,31 @@ function Get-ActiveExplorerTarget {
                 }
             } catch {}
         }
-        if ($paths) { return $paths[-1] }
+        return @($paths)
     } catch {}
-    return ""
+    return @()
 }
 
+$openFolders = @(Get-ActiveExplorerTarget)
+$folderCandidates = @()
+$commonPaths = @([Environment]::GetFolderPath("MyDocuments"), [Environment]::GetFolderPath("Desktop"), $env:OneDrive, $env:OneDriveCommercial, $env:OneDriveConsumer, (Join-Path $env:USERPROFILE "Dropbox"))
+foreach ($p in @($openFolders) + @($commonPaths)) {
+    if ($p -and (Test-Path -LiteralPath $p -PathType Container)) {
+        $folderCandidates += [ordered]@{ path = $p; evidence = "open_or_common_location"; confirmed = $false }
+    }
+}
+$runningApps = @(Get-RunningGuiApps)
+$installedApps = @(Get-InstalledApps)
+$mappedShares = @(Get-MappedShares)
 $result = [ordered]@{
-    running_apps   = @(Get-RunningGuiApps)
-    installed_apps = @(Get-InstalledApps)
+    running_apps   = $runningApps
+    installed_apps = $installedApps
     browser_tabs   = @()
-    mounted_shares = @(Get-MappedShares)
-    finder_target  = Get-ActiveExplorerTarget
+    mounted_shares = $mappedShares
+    finder_target  = if ($openFolders.Count) { $openFolders[0] } else { "" }
+    open_folders = $openFolders
+    folder_candidates = $folderCandidates
+    collection_errors = @($Error | ForEach-Object { [ordered]@{ source = "windows_inventory"; error = $_.Exception.GetType().Name } })
     collected_at   = (Get-Date).ToUniversalTime().ToString("o")
     host           = $env:COMPUTERNAME
 }

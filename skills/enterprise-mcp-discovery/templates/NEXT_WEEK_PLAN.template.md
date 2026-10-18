@@ -1,8 +1,15 @@
-# Next-week plan — {{company}}
+# Next steps — {{company}} / {{department}}
+Workflow: {{primary_workflow}}
 
-## Day 1 — Discovery interview + discovery.json
-## Day 2 — Access probes / export path confirmed
-## Day 3 — Scaffold MCP (accounting OR purchasing OR sales)
-## Day 4 — Wire Codex/Claude + smoke tests
-## Day 5 — Golden questions demo with sponsor
-## Day 6–7 — Harden allowlist, document handoff, propose month-2 writes
+## First action
+Owner: {{owner}} | Action: {{action}} | Expected evidence: {{result}}
+
+## Remaining work
+| Priority | Required source / blocker | Owner | Concrete action | Completion evidence |
+|---|---|---|---|---|
+| | | | | |
+
+## Pilot scope
+Verified sources, supported tasks, freshness limits and remaining manual steps.
+Connector installation is optional and requires authorization. Read-only controls
+and allowed data roots must be established before exercising the pilot.

@@ -2,53 +2,454 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "EnterpriseDiscovery",
   "type": "object",
-  "required": ["engagement", "systems", "unstructured", "access_notes"],
+  "required": [
+    "engagement",
+    "systems",
+    "unstructured",
+    "access_notes",
+    "data_locations",
+    "limitations"
+  ],
   "properties": {
     "engagement": {
       "type": "object",
       "properties": {
-        "company": { "type": "string" },
-        "industry": { "type": "string" },
-        "locale": { "enum": ["fr-CA", "en"] },
-        "primary_workflow": { "type": "string" },
-        "sponsor": { "type": "string" }
-      }
+        "company": {
+          "type": "string"
+        },
+        "industry": {
+          "type": "string"
+        },
+        "locale": {
+          "enum": [
+            "fr-CA",
+            "en"
+          ]
+        },
+        "primary_workflow": {
+          "type": "string"
+        },
+        "sponsor": {
+          "type": "string"
+        },
+        "department": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "company",
+        "department",
+        "primary_workflow",
+        "sponsor"
+      ]
     },
     "systems": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["name", "domain"],
+        "required": [
+          "name",
+          "domain",
+          "id",
+          "owner",
+          "required_for_workflow",
+          "evidence",
+          "verification",
+          "access"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "domain": {
-            "enum": ["accounting", "sales", "purchasing", "inventory", "payroll", "mes", "other"]
+          "name": {
+            "type": "string"
           },
-          "version": { "type": "string" },
-          "hosting": { "enum": ["on_prem", "cloud", "unknown"] },
-          "location_or_url": { "type": "string" },
-          "daily_users": { "type": "string" },
+          "domain": {
+            "enum": [
+              "accounting",
+              "sales",
+              "purchasing",
+              "inventory",
+              "payroll",
+              "mes",
+              "other",
+              "crm",
+              "docs",
+              "chat",
+              "email",
+              "notes",
+              "tasks"
+            ]
+          },
+          "version": {
+            "type": "string"
+          },
+          "hosting": {
+            "enum": [
+              "on_prem",
+              "saas",
+              "cloud",
+              "unknown"
+            ]
+          },
+          "location_or_url": {
+            "type": "string"
+          },
+          "daily_users": {
+            "type": "string"
+          },
           "export_methods": {
             "type": "array",
-            "items": { "enum": ["api", "odbc_sql", "csv", "excel", "pdf", "ui_only", "unknown"] }
+            "items": {
+              "enum": [
+                "api",
+                "odbc_sql",
+                "csv",
+                "excel",
+                "pdf",
+                "ui_only",
+                "unknown"
+              ]
+            }
           },
-          "class_guess": { "enum": ["A", "B", "C", "D", "unknown"] }
+          "class_guess": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "unknown"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_for_workflow": {
+            "type": "boolean"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "kind",
+                "reference",
+                "checked_at"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "observed",
+                    "user_confirmed",
+                    "documented",
+                    "tested"
+                  ]
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "checked_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "verification": {
+            "enum": [
+              "observed",
+              "user_confirmed",
+              "documented",
+              "tested",
+              "blocked",
+              "unverified"
+            ]
+          },
+          "test_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "access": {
+            "type": "object",
+            "required": [
+              "method",
+              "location",
+              "permissions",
+              "credential_owner",
+              "read_only_verified",
+              "freshness",
+              "steps"
+            ],
+            "properties": {
+              "method": {
+                "enum": [
+                  "api",
+                  "database",
+                  "connector",
+                  "files",
+                  "export",
+                  "ui_only",
+                  "unknown"
+                ]
+              },
+              "location": {
+                "type": "string"
+              },
+              "permissions": {
+                "type": "string"
+              },
+              "credential_owner": {
+                "type": "string"
+              },
+              "credential_reference": {
+                "type": "string"
+              },
+              "read_only_verified": {
+                "type": "boolean"
+              },
+              "freshness": {
+                "type": "string"
+              },
+              "steps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "blocker": {
+                "type": "string"
+              },
+              "next_action": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     },
     "unstructured": {
       "type": "object",
       "properties": {
-        "chat": { "type": "string" },
-        "files": { "type": "string" },
-        "email": { "type": "string" },
-        "invoice_pdf_location": { "type": "string" }
+        "chat": {
+          "type": "string"
+        },
+        "files": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "invoice_pdf_location": {
+          "type": "string"
+        }
       }
     },
-    "access_notes": { "type": "string" },
+    "access_notes": {
+      "type": "string"
+    },
     "must_not_touch": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
+    },
+    "data_locations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "purpose",
+          "path",
+          "storage_type",
+          "owner",
+          "required_for_workflow",
+          "authoritative",
+          "allowed_roots",
+          "excluded_roots",
+          "verification",
+          "evidence",
+          "access",
+          "coverage"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_for_workflow": {
+            "type": "boolean"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "kind",
+                "reference",
+                "checked_at"
+              ],
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "observed",
+                    "user_confirmed",
+                    "documented",
+                    "tested"
+                  ]
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "checked_at": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "verification": {
+            "enum": [
+              "observed",
+              "user_confirmed",
+              "documented",
+              "tested",
+              "blocked",
+              "unverified"
+            ]
+          },
+          "test_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "access": {
+            "type": "object",
+            "required": [
+              "method",
+              "location",
+              "permissions",
+              "credential_owner",
+              "read_only_verified",
+              "freshness",
+              "steps"
+            ],
+            "properties": {
+              "method": {
+                "enum": [
+                  "api",
+                  "database",
+                  "connector",
+                  "files",
+                  "export",
+                  "ui_only",
+                  "unknown"
+                ]
+              },
+              "location": {
+                "type": "string"
+              },
+              "permissions": {
+                "type": "string"
+              },
+              "credential_owner": {
+                "type": "string"
+              },
+              "credential_reference": {
+                "type": "string"
+              },
+              "read_only_verified": {
+                "type": "boolean"
+              },
+              "freshness": {
+                "type": "string"
+              },
+              "steps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "blocker": {
+                "type": "string"
+              },
+              "next_action": {
+                "type": "string"
+              }
+            }
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "system_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "storage_type": {
+            "enum": [
+              "local",
+              "network",
+              "synced_cloud",
+              "cloud_only",
+              "export",
+              "archive",
+              "unknown"
+            ]
+          },
+          "authoritative": {
+            "enum": [
+              "yes",
+              "copy",
+              "unknown"
+            ]
+          },
+          "allowed_roots": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "excluded_roots": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "coverage": {
+            "type": "string"
+          },
+          "file_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "extraction_status": {
+            "enum": [
+              "tested",
+              "untested",
+              "unavailable",
+              "not_required"
+            ]
+          }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   }
 }

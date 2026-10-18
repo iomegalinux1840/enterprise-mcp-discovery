@@ -1,65 +1,78 @@
-# Agent-Ready Report (Day 1)
+# Agent-Ready System Report
+Company: {{company}} | Department: {{department}} | Date: {{date}}
+Sponsor: {{sponsor}} | Primary workflow: {{primary_workflow}}
+Verdict: {{PASS / CONDITIONAL / NOT READY}}
 
-| Field | Value |
-|---|---|
-| **Company** | {{company}} |
-| **Date** | {{date}} |
-| **Primary workflow** | {{primary_workflow}} |
-| **Sponsor** | {{sponsor}} |
-| **Verdict** | {{PASS / CONDITIONAL / NOT READY}} |
+## Executive summary
+In five lines: what the agent can do today, the first wall it would hit, coverage
+limits, the most consequential blocker and one recommended action for its owner.
+Readiness applies to the named workflow, not the entire company.
 
-## The only question that matters
+## Systems and business data map
+| Source ID | System / data location | Purpose and exact location (sanitized) | Owner | Required for workflow? | Observed / confirmed / documented / tested / blocked / unverified |
+|---|---|---|---|---|---|
+| | | | | | |
 
-**Are you agent-ready?**  
-Not “do we have ChatGPT / Copilot.”  
-Is your data reachable by a normal AI agent — or locked in ERP screens, exports, and tribal knowledge?
+Include every confirmed department system and folder. Put unresolved leads in gaps.
+Keep sensitive infrastructure details in the restricted technical appendix if needed.
 
-## Executive summary (5 lines max)
-{{summary}}
+## Evidence scorecard
+Use ✅ verified, ⚠️ partial/untested, ❌ blocked/failed, or N/A with a reason.
+Every row needs a source/test reference or a specific gap. No empty evidence cells.
 
-## Scorecard (checkmarks)
+| Check | Status | Evidence / limitation |
+|---|---|---|
+| Accounting data needed by workflow | | |
+| Purchasing / inventory data needed by workflow | | |
+| Sales / CRM data needed by workflow | | |
+| Every required folder/library located, allowlisted and searchable | | |
+| Required document reading/extraction/OCR demonstrated | | |
+| Required email/chat and other sources accessible or explicitly out of scope | | |
+| Every required source passed its intended read test | | |
+| End-to-end primary-workflow read passed | | |
+| Read-only permissions verified for the intended agent identity | | |
+| Credential owner and secure retrieval procedure known | | |
+| Freshness and authoritative data sources established | | |
+| Blockers have accountable owners and actionable fixes | | |
 
-Use ✅ / ⚠️ / ❌ only. Every row must have evidence.
+## Verdict rules
+- **PASS:** every workflow-required source (systems AND folders/libraries) has a
+  successful intended read/search test, required extraction is demonstrated, the
+  end-to-end read passes, read-only enforcement is verified, and credential ownership,
+  scope and freshness expectations are established. Any required unknown prevents PASS.
+- **CONDITIONAL:** a useful bounded pilot has a verified read-only path but explicit
+  manual bridges, partial coverage or pending access tests remain. State exactly
+  which reduced pilot is supported; never claim the full workflow works.
+- **NOT READY:** an indispensable source has no demonstrated usable path and no
+  verified bounded pilot exists, or read-only enforcement is failed/unverified.
+- A verified export bridge can PASS if it meets the workflow's freshness and access
+  needs. A connector class, installed package or documentation link alone cannot PASS.
+- N/A is allowed only for sources irrelevant to the chosen workflow, with a reason.
 
-| # | Check | Status | Evidence |
-|---|---|---|---|
-| 1 | **Accounting / GL** reachable by an agent (API, SQL view, or validated export path) | {{ }} | |
-| 2 | **Purchasing / inventory** reachable the same way | {{ }} | |
-| 3 | **Sales / orders / CRM** reachable the same way | {{ }} | |
-| 4 | **Business files** (PO/invoice PDFs, SharePoint/NAS) searchable under an allowlist | {{ }} | |
-| 5 | **Chat / email** either has an official MCP/plugin **or** is explicitly out of week-1 scope | {{ }} | |
-| 6 | At least **one** end-to-end read smoke test passed for the primary workflow | {{ }} | |
-| 7 | **Write actions disabled** (read-only) until a later approved phase | {{ }} | |
-| 8 | Secrets path known (who owns credentials) — values not pasted into chat | {{ }} | |
-| 9 | Blockers have an owner + next step (IT / vendor / process) | {{ }} | |
-| 10 | Director can name **what to fix before the next AI pilot** | {{ }} | |
-
-### Verdict rules
-- **PASS:** checks 1–3 that matter for the workflow are ✅, check 6 ✅, check 7 ✅
-- **CONDITIONAL:** workflow partially reachable (e.g. export bridge only) — pilot OK with limits
-- **NOT READY:** the first system that matters for the workflow is ❌ (UI-only / no access path)
-
-## What an agent can use **today**
-| System | Domain | Access path | Class (A/B/C/D) | MCP status |
+## What an agent can use today
+| Source ID | Available business data | Verified method and scope | Test reference / date | Limits / freshness |
 |---|---|---|---|---|
 | | | | | |
 
-## What’s **blocked**
-| System | Why blocked | Owner | Fix before next pilot |
+## Possible access, not yet verified
+| Source ID | Documented method / source | Missing verification | Owner / next step |
 |---|---|---|---|
 | | | | |
 
-## Gaps called out in discovery
-- CRM: {{found / missing / N/A}}
-- ERP / accounting: {{ }}
-- Document / ECM vault: {{ }}
-- Other: {{ }}
+## Blockers and discovery gaps
+| Source ID or missing domain | Impact on workflow | Owner | Concrete fix | Priority |
+|---|---|---|---|---|
+| | | | | |
 
-## Recommended next step (one sentence)
-{{e.g. Wire read-only MCP for late POs this week; defer CRM until export path exists.}}
+Call out denied/offline/truncated scans, missing URLs, remote systems not inspected,
+unconfirmed folders, unsupported file formats and unavailable credentials.
 
-## Appendix
-- Full matrix: `ACCESS_REPORT.md`
-- Inventory: `inventory_grouped.md`
-- MCP catalog: `mcp_catalog.json`
-- Smoke tests: `SMOKE_TEST.md`
+## Recommended next action
+One action, owner and expected result. Then list remaining fixes before the next pilot.
+
+## Technical handoff
+- DATA_LOCATIONS.md — exact data locations, ownership and scan coverage
+- ACCESS_REPORT.md — per-source connection instructions and evidence
+- discovery.json — structured systems and location register
+- SMOKE_TEST.md — per-source and end-to-end verification
+- inventory_grouped.md / folder_inventory.json — discovery evidence and limits
